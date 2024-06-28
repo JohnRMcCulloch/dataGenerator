@@ -41,6 +41,9 @@ public class WeatherGeneratorTests
 
         Assert.InRange(weatherModel.Longitude, -180, 180);
         Assert.InRange(weatherModel.Latitude, -90, 90);
+        AssertDecimalPlaces(_weatherConfig.Information.LongitudeDecimalPlaces, weatherModel.Longitude);
+        AssertDecimalPlaces(_weatherConfig.Information.LatitudeDecimalPlaces, weatherModel.Latitude);
+        
         Assert.Contains(weatherModel.TemperatureUnit,
             _weatherConfig.Information.TemperatureUnit);
         if (weatherModel.TemperatureUnit == "C")
@@ -60,5 +63,13 @@ public class WeatherGeneratorTests
         Assert.InRange(weatherModel.PrecipitationChance, 0,
             _weatherConfig.Information
                 .PrecipitationChancePercentageUpperLimit);
+    }
+    
+    private void AssertDecimalPlaces(int expectedDecimalPlaces, double actual)
+    {
+        var valueStr = actual.ToString("0.###############");
+        var actualDecimalPlaces = valueStr.Length - valueStr.IndexOf('.') - 1;
+
+        Assert.Equal(expectedDecimalPlaces, actualDecimalPlaces);
     }
 }

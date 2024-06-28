@@ -39,12 +39,13 @@ public class WeatherGenerator : IDataGenerator<WeatherModel>
     /// <returns>A configured <see cref="Faker{WeatherModel}"/> instance.</returns>
     private Faker<WeatherModel> GenerateFakeWeather()
     {
+        var randomizer = new Randomizer();
         return new Faker<WeatherModel>()
             .RuleFor(w => w.Timestamp, f => f.Date.RecentOffset(30).UtcDateTime)
             .RuleFor(w => w.Longitude,
-                f => Math.Round(f.Address.Longitude(), _weatherConfig.Information.LongitudeDecimalPlaces))
+                f => Math.Round(randomizer.Double(-180, 180), _weatherConfig.Information.LongitudeDecimalPlaces))
             .RuleFor(w => w.Latitude,
-                f => Math.Round(f.Address.Latitude(), _weatherConfig.Information.LatitudeDecimalPlaces))
+                f => Math.Round(randomizer.Double(-90, 0), _weatherConfig.Information.LatitudeDecimalPlaces))
             .RuleFor(w => w.TemperatureUnit, f =>
                 f.PickRandom(_weatherConfig.Information.TemperatureUnit))
             .RuleFor(w => w.TemperatureValue, (f, w) =>

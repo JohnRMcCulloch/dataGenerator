@@ -48,17 +48,24 @@ The application settings are stored in a JSON file, allowing easy configuration 
 | `Serilog.MinimumLevel.Override.Microsoft`               | Logging level override for Microsoft components                      | `Information` | -                                            |
 | `Serilog.MinimumLevel.Override.System`                  | Logging level override for System components                         | `Warning` | -                                            |
 
+## Pre Requirements
+.NET Core SDK 8
+[Dotnet 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0 "Dotnet 8")
+
 ## Usage
 
 1. Ensure the app settings file is properly set up with the desired settings.
 2. Run the application.
 3. The generated weather data files will be saved to the specified output path.
 
+Ensure you have navigated to the `dataGenerator` directory containing `dataGenerator.csproj`
 ```console
 dotnet build
 dotnet run
 ```
 These will install any needed dependencies, build the project, and run the project respectively.
+
+**Alternatively** you can build and run via an IDE
 
 ## Future Development
 At present the application produces weather information, but it can be easily extended to produce other data types.

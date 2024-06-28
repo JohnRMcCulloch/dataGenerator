@@ -40,7 +40,7 @@ The application settings are stored in a JSON file, allowing easy configuration 
 | `WeatherConfig.Information.LatitudeDecimalPlaces`       | Number of decimal places for latitude values                         | `6`   | `6`                                            |
 | `WeatherConfig.Information.TemperatureDecimalPlaces`    | Number of decimal places for temperature values                      | `1`   | `1`                                            |
 | `WeatherConfig.Information.TemperatureUnit`             | List of possible temperature units                                   | `["C", "F"]` | `["C", "F"]`                                   |
-| `WeatherConfig.Information.WindSpeedDecimalPlaces`      | Number of decimal places for wind speed values                       | `1   | 1                                            |
+| `WeatherConfig.Information.WindSpeedDecimalPlaces`      | Number of decimal places for wind speed values                       | `1`   | `1`                                            |
 | `WeatherConfig.Information.WindSpeedUnit`               | List of possible wind speed units                                    | `["km/h"]` | `["km/h"]`                                     |
 | `WeatherConfig.Information.WindDirection`               | List of possible wind directions                                     | `["N", "NE", "E", "SE", "S", "SW", "W", "NW"]` | `["N", "NE", "E", "SE", "S", "SW", "W", "NW"]` |
 | `WeatherConfig.Information.PrecipitationChancePercentageUpperLimit` | Upper limit for precipitation chance percentage | `100` | `100`                                          |

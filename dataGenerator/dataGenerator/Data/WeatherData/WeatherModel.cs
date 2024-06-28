@@ -1,5 +1,8 @@
 ﻿namespace dataGenerator.Data.WeatherData;
 
+/// <summary>
+/// Represents a model for weather data.
+/// </summary>
 public class WeatherModel
 {
     public DateTime Timestamp { get; set; }

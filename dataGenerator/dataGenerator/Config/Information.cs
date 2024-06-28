@@ -1,5 +1,8 @@
 ﻿namespace dataGenerator.Config;
 
+/// <summary>
+/// Configuration class for specifying information-related settings.
+/// </summary>
 public class Information
 {
     public int LongitudeDecimalPlaces { get; set; } = 6;

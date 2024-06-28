@@ -5,11 +5,18 @@ using Microsoft.Extensions.Options;
 
 namespace dataGenerator.Data;
 
+/// <summary>
+/// Generates weather data models based on the provided configuration.
+/// </summary>
 public class WeatherGenerator : IDataGenerator<WeatherModel>
 {
     private readonly Faker<WeatherModel> _weatherModelFaker;
     private readonly WeatherConfig _weatherConfig;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WeatherGenerator"/> class.
+    /// </summary>
+    /// <param name="weatherConfig">The weather configuration options.</param>
     public WeatherGenerator(IOptions<WeatherConfig> weatherConfig)
     {
         _weatherConfig = weatherConfig.Value;
@@ -17,11 +24,19 @@ public class WeatherGenerator : IDataGenerator<WeatherModel>
         _weatherModelFaker = GenerateFakeWeather();
     }
 
+    /// <summary>
+    /// Generates a single instance of <see cref="WeatherModel"/>.
+    /// </summary>
+    /// <returns>A generated <see cref="WeatherModel"/> instance.</returns>
     public WeatherModel GenerateData()
     {
         return _weatherModelFaker.Generate();
     }
 
+    /// <summary>
+    /// Configures the rules for generating fake weather data.
+    /// </summary>
+    /// <returns>A configured <see cref="Faker{WeatherModel}"/> instance.</returns>
     private Faker<WeatherModel> GenerateFakeWeather()
     {
         return new Faker<WeatherModel>()

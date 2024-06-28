@@ -1,5 +1,8 @@
 ﻿namespace dataGenerator.Config;
 
+/// <summary>
+/// Configuration class for specifying weather data generation settings.
+/// </summary>
 public class WeatherConfig
 {
     public string FileName { get; set; } = "WeatherData";

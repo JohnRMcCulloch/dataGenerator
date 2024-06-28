@@ -1,17 +1,18 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using dataGenerator.Config;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace dataGenerator.FileWriter;
 
 public class PlainTextFileWriter : IFileWriter
 {
     private readonly ILogger<PlainTextFileWriter> _log;
-    private readonly IConfiguration _config;
+    private readonly FileConfig _weatherConfig;
 
-    public PlainTextFileWriter(ILogger<PlainTextFileWriter> log, IConfiguration config)
+    public PlainTextFileWriter(ILogger<PlainTextFileWriter> log, IOptions<FileConfig> weatherConfig)
     {
         _log = log;
-        _config = config;
+        _weatherConfig = weatherConfig.Value;
     }
 
     public void WriteToFile(string content, string fileName)
@@ -31,7 +32,7 @@ public class PlainTextFileWriter : IFileWriter
 
     private string GetDirectoryPath()
     {
-        var directoryPath = _config.GetValue<string>("FilePath");
+        var directoryPath = _weatherConfig.FilePath;
         if (Directory.Exists(directoryPath)) return directoryPath;
         Directory.CreateDirectory(directoryPath!);
         _log.LogInformation("Directory created successfully {directory}", directoryPath);

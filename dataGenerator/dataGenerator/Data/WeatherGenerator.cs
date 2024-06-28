@@ -1,34 +1,50 @@
 ﻿using Bogus;
+using dataGenerator.Config;
 using dataGenerator.Data.WeatherData;
+using Microsoft.Extensions.Options;
 
 namespace dataGenerator.Data;
 
 public class WeatherGenerator : IDataGenerator<WeatherModel>
 {
     private readonly Faker<WeatherModel> _weatherModelFaker;
+    private readonly WeatherConfig _weatherConfig;
 
-    public WeatherGenerator()
+    public WeatherGenerator(IOptions<WeatherConfig> weatherConfig)
     {
-        //Look into Randomizer and Seed value
+        _weatherConfig = weatherConfig.Value;
         Randomizer.Seed = new Random(123);
-        _weatherModelFaker = new Faker<WeatherModel>()
-            .RuleFor(w => w.Timestamp, f => f.Date.RecentOffset(30).UtcDateTime)
-            .RuleFor(w => w.Longitude, f => Math.Round(f.Address.Longitude(), 6))
-            .RuleFor(w => w.Latitude, f => Math.Round(f.Address.Latitude(), 6))
-            .RuleFor(w => w.TemperatureUnit, f => f.PickRandom("C", "F"))
-            .RuleFor(w => w.TemperatureValue, (f, w) =>
-                w.TemperatureUnit == "C"
-                    ? Math.Round(f.Random.Double(-30, 50), 1) // Celsius range
-                    : Math.Round(f.Random.Double(-22, 122), 1)) // Fahrenheit range
-            .RuleFor(w => w.WindSpeedValue, f => Math.Round(f.Random.Double(0, 150), 1))
-            .RuleFor(w => w.WindSpeedUnit, f => "km/h")
-            .RuleFor(w => w.WindDirection, f =>
-                f.PickRandom("N", "NE", "E", "SE", "S", "SW", "W", "NW"))
-            .RuleFor(w => w.PrecipitationChance, f => f.Random.Int(0, 100));
+        _weatherModelFaker = GenerateFakeWeather();
     }
 
     public WeatherModel GenerateData()
     {
         return _weatherModelFaker.Generate();
+    }
+
+    private Faker<WeatherModel> GenerateFakeWeather()
+    {
+        return new Faker<WeatherModel>()
+            .RuleFor(w => w.Timestamp, f => f.Date.RecentOffset(30).UtcDateTime)
+            .RuleFor(w => w.Longitude,
+                f => Math.Round(f.Address.Longitude(), _weatherConfig.Information.LongitudeDecimalPlaces))
+            .RuleFor(w => w.Latitude,
+                f => Math.Round(f.Address.Latitude(), _weatherConfig.Information.LatitudeDecimalPlaces))
+            .RuleFor(w => w.TemperatureUnit, f =>
+                f.PickRandom(_weatherConfig.Information.TemperatureUnit))
+            .RuleFor(w => w.TemperatureValue, (f, w) =>
+                w.TemperatureUnit == "C"
+                    ? Math.Round(f.Random.Double(-30, 50),
+                        _weatherConfig.Information.TemperatureDecimalPlaces) // Celsius range
+                    : Math.Round(f.Random.Double(-22, 122),
+                        _weatherConfig.Information.TemperatureDecimalPlaces)) // Fahrenheit range
+            .RuleFor(w => w.WindSpeedValue,
+                f => Math.Round(f.Random.Double(0, 150), _weatherConfig.Information.WindSpeedDecimalPlaces))
+            .RuleFor(w => w.WindSpeedUnit, f =>
+                f.PickRandom(_weatherConfig.Information.WindSpeedUnit))
+            .RuleFor(w => w.WindDirection, f =>
+                f.PickRandom(_weatherConfig.Information.WindDirection))
+            .RuleFor(w => w.PrecipitationChance,
+                f => f.Random.Int(0, _weatherConfig.Information.PrecipitationChancePercentageUpperLimit));
     }
 }

@@ -1,35 +1,37 @@
 ﻿using System.Text;
+using dataGenerator.Config;
 using dataGenerator.Data;
 using dataGenerator.Data.WeatherData;
 using dataGenerator.FileWriter;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace dataGenerator.Factory;
 
 public class WeatherFactory : IDataFactory
 {
     private readonly ILogger<WeatherFactory> _log;
-    private readonly IConfiguration _config;
+    private readonly WeatherConfig _weatherConfig;
     private readonly IDataGenerator<WeatherModel> _dataGenerator;
     private readonly IFileWriter _fileWriter;
 
-    public WeatherFactory(ILogger<WeatherFactory> log, IConfiguration config,
+    public WeatherFactory(ILogger<WeatherFactory> log, IOptions<WeatherConfig> weatherConfig,
         IDataGenerator<WeatherModel> dataGenerator, IFileWriter fileWriter)
     {
         _log = log;
-        _config = config;
+        _weatherConfig = weatherConfig.Value;
         _dataGenerator = dataGenerator;
         _fileWriter = fileWriter;
     }
 
     public void Generate()
     {
-        var startTimestamp = _config.GetValue<DateTime>("Weather:StartTimestampUTC");
-        var lengthOfHours = _config.GetValue<int>("Weather:WeatherTimestampQuantity");
-        var numberOfRecords = _config.GetValue<int>("Weather:NumberOfWeatherInformationRecords");
-
-        var content = GenerateWeatherBatchData(startTimestamp, lengthOfHours, numberOfRecords);
+        _log.LogInformation("Generating Weather Data for File");
+        var content = GenerateWeatherBatchData(
+            startTimestamp: _weatherConfig.StartTimestampUtc,
+            lengthOfHours: _weatherConfig.WeatherTimestampQuantity,
+            numberOfWeatherInformationRecords: _weatherConfig.NumberOfWeatherInformationRecords
+        );
         _fileWriter.WriteToFile(content, GetFileName());
     }
 
@@ -72,7 +74,7 @@ public class WeatherFactory : IDataFactory
 
     private string GetFileName()
     {
-        var fileName = _config.GetValue<string>("Weather:fileName");
+        var fileName = _weatherConfig.FileName;
         return string.IsNullOrEmpty(fileName) ? "WeatherData" : fileName;
     }
 }

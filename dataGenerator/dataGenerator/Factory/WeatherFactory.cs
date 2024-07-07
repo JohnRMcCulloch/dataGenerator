@@ -45,7 +45,7 @@ public class WeatherFactory : IDataFactory
             lengthOfHours: _weatherConfig.WeatherTimestampQuantity,
             numberOfWeatherInformationRecords: _weatherConfig.NumberOfWeatherInformationRecords
         );
-        _fileWriter.WriteToFile(content, GetFileName());
+        _fileWriter.WriteToFile(content, _weatherConfig.FileName);
     }
 
     /// <summary>
@@ -79,11 +79,5 @@ public class WeatherFactory : IDataFactory
         }
 
         return stringBuilder.ToString();
-    }
-
-    private string GetFileName()
-    {
-        var fileName = _weatherConfig.FileName;
-        return string.IsNullOrEmpty(fileName) ? "WeatherData" : fileName;
     }
 }

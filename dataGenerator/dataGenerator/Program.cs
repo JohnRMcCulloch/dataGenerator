@@ -23,7 +23,7 @@ class Program
             .WriteTo.Console()
             .CreateLogger();
 
-        var host = Host.CreateDefaultBuilder()
+        using var host = Host.CreateDefaultBuilder()
             .ConfigureServices((context, services) =>
             {
                 services.Configure<WeatherConfig>(context.Configuration.GetSection("WeatherConfig"));
@@ -35,11 +35,11 @@ class Program
             .UseSerilog()
             .Build();
 
-        var svc = ActivatorUtilities.CreateInstance<WeatherFactory>(host.Services);
-        svc.Generate();
+        var svc = host.Services.GetService<IDataFactory>();
+        svc?.Generate();
     }
 
-    static void BuildConfig(IConfigurationBuilder builder)
+    private static void BuildConfig(IConfigurationBuilder builder)
     {
         builder.SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

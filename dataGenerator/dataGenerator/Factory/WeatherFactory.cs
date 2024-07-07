@@ -62,21 +62,10 @@ public class WeatherFactory : IDataFactory
 
         for (var i = 0; i < lengthOfHours; i++)
         {
-            var hourData = new List<WeatherModel>();
-
+            stringBuilder.AppendLine(startTimestamp.AddHours(i).ToString("yyyy-MM-dd HH:00UTC"));
             for (var j = 0; j < numberOfWeatherInformationRecords; j++)
             {
                 var weatherData = _dataGenerator.GenerateData();
-                // Adjust the timestamp to the specific hour we are iterating over
-                weatherData.Timestamp = startTimestamp.AddHours(i);
-                hourData.Add(weatherData);
-            }
-
-            var timestamp = hourData.First().Timestamp.ToString("yyyy-MM-dd HH:00UTC");
-            stringBuilder.AppendLine(timestamp);
-
-            foreach (var weatherData in hourData)
-            {
                 stringBuilder.AppendLine(
                     $"{weatherData.Longitude}" +
                     $"\t{weatherData.Latitude}" +

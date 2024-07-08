@@ -27,23 +27,17 @@ public class WeatherGeneratorTests
     [Fact]
     public void GenerateDataGenerate_Success()
     {
-        //Arrange
-        var expectedTimestampLower = _weatherConfig.StartTimestampUtc.Date.AddDays(-30);
-        var expectedTimestampUpper = _weatherConfig.StartTimestampUtc.Date.AddDays(+30);
-
         // Act
         var weatherModel = _weatherGenerator.GenerateData();
 
         // Assert
         Assert.NotNull(weatherModel);
-        Assert.True(
-            weatherModel.Timestamp >= expectedTimestampLower && weatherModel.Timestamp <= expectedTimestampUpper);
 
         Assert.InRange(weatherModel.Longitude, -180, 180);
         Assert.InRange(weatherModel.Latitude, -90, 90);
         AssertDecimalPlaces(_weatherConfig.Information.LongitudeDecimalPlaces, weatherModel.Longitude);
         AssertDecimalPlaces(_weatherConfig.Information.LatitudeDecimalPlaces, weatherModel.Latitude);
-        
+
         Assert.Contains(weatherModel.TemperatureUnit,
             _weatherConfig.Information.TemperatureUnit);
         if (weatherModel.TemperatureUnit == "C")
@@ -64,7 +58,7 @@ public class WeatherGeneratorTests
             _weatherConfig.Information
                 .PrecipitationChancePercentageUpperLimit);
     }
-    
+
     private void AssertDecimalPlaces(int expectedDecimalPlaces, double actual)
     {
         var valueStr = actual.ToString("0.###############");

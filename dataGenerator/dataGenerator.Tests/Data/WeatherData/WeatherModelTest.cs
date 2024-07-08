@@ -7,10 +7,9 @@ namespace dataGenerator.Tests.Data.WeatherData;
 public class WeatherModelTest
 {
     [Fact]
-    public void TestWeatherModelSetter()
+    public void TestWeatherModelConstructorSetter()
     {
         // Arrange
-        var timestamp = new DateTime(2024, 6, 28, 12, 0, 0);
         const double longitude = 123.45;
         const double latitude = 54.32;
         const double temperatureValue = 25.5;
@@ -23,7 +22,6 @@ public class WeatherModelTest
         // Act
         var weatherModel = new WeatherModel
         {
-            Timestamp = timestamp,
             Longitude = longitude,
             Latitude = latitude,
             TemperatureValue = temperatureValue,
@@ -35,7 +33,6 @@ public class WeatherModelTest
         };
 
         // Assert
-        Assert.Equal(timestamp, weatherModel.Timestamp);
         Assert.Equal(longitude, weatherModel.Longitude);
         Assert.Equal(latitude, weatherModel.Latitude);
         Assert.Equal(temperatureValue, weatherModel.TemperatureValue);

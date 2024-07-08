@@ -40,8 +40,8 @@ public class WeatherGenerator : IDataGenerator<WeatherModel>
     private Faker<WeatherModel> GenerateFakeWeather()
     {
         var randomizer = new Randomizer();
+        
         return new Faker<WeatherModel>()
-            .RuleFor(w => w.Timestamp, f => f.Date.RecentOffset(30).UtcDateTime)
             .RuleFor(w => w.Longitude,
                 f => Math.Round(randomizer.Double(-180, 180), _weatherConfig.Information.LongitudeDecimalPlaces))
             .RuleFor(w => w.Latitude,
